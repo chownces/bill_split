@@ -1,0 +1,20 @@
+:root {
+  /* --main-bg-color: #444c56; */
+  /* --main-bg-color: #373e47; */
+  --main-bg-color: #22272e;
+  --text-color: rgb(173, 186, 199);
+  --dark-highlight: #22272e;
+  --border: #545d68;
+
+  --danger: #e5534b
+}
+.Application {
+  height: var(--application-height, 100vh);
+  color: rgb(173, 186, 199);
+
+}
+
+input {
+  background-color: var(--main-bg-color);
+  border: 2px solid #373e47 !important;
+}
