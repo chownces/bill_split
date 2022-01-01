@@ -44,6 +44,7 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualA
 
   useEffect(() => {
     setIndividualAmounts(individualPaidAmountsOnly);
+    // eslint-disable-next-line
   }, []);
 
   const handleNext = () => {
