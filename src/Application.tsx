@@ -1,6 +1,6 @@
 import { Center, Flex } from "@chakra-ui/react";
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "./Application.css";
 import { useLocalStorageState } from "./hooks";
 import AllocateBills, {
@@ -38,8 +38,10 @@ const Application: React.FC = () => {
     setIndividualAmounts({});
   }
 
+  const ENV = process.env.REACT_APP_NODE_ENV;
+
   return (
-    <BrowserRouter>
+    <Router basename={ENV === 'production' ? "/bill_split" : undefined}>
       <Center bg="var(--main-bg-color)" className="Application" maxH={1000}>
         <Flex
           w="100vw"
@@ -85,7 +87,7 @@ const Application: React.FC = () => {
           </Routes>
         </Flex>
       </Center>
-    </BrowserRouter>
+    </Router>
   );
 };
 

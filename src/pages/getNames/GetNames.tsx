@@ -42,6 +42,14 @@ const GetNames: React.FC<GetNamesProps> = ({ names, setNames, handleRestart }) =
     setNames(updatedNames);
   }
 
+  const handleNext = () => {
+    if (!names.length) {
+      setAlertMessage('Please input at least 1 name!');
+      return
+    }
+    navigate('/get-bills');
+  }
+
   const renderNameInput = () => (
     <Input
       value={nameInputValue}
@@ -85,7 +93,7 @@ const GetNames: React.FC<GetNamesProps> = ({ names, setNames, handleRestart }) =
           </HStack>
         </form>
         <Button
-          onClick={() => navigate('/get-bills')}
+          onClick={handleNext}
           isFullWidth
           colorScheme='cyan'
           mt={2}
