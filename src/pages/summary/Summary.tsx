@@ -1,7 +1,6 @@
 import { IndividualAmounts } from "../allocateBills/AllocateBills";
 import {
   Box,
-  Heading,
   Table,
   Tbody,
   Td,
@@ -11,21 +10,22 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import React from "react";
+import AppHeader from "src/components/appHeader/AppHeader";
 
 type SummaryProps = {
   names: string[];
   individualAmounts: IndividualAmounts;
-  setCurrentState: React.Dispatch<React.SetStateAction<number>>;
+  handleRestart: () => void;
 };
 
 const Summary: React.FC<SummaryProps> = ({
   names,
   individualAmounts,
-  setCurrentState,
+  handleRestart
 }) => {
   return (
     <Box>
-      <Heading>Summary</Heading>
+      <AppHeader title="Summary" handleRestart={handleRestart} />
       <Box overflow="auto">
         <Table bg="white" color="black" mt={3}>
           <Thead>

@@ -18,6 +18,8 @@ const Entry: React.FC<EntryProps> = ({ content, onDelete }) => (
       icon={<MinusIcon />}
       isRound
       bg="var(--danger)"
+      color="white"
+      colorScheme='red'
       size='sm'
       aria-label='Delete entry'
       onClick={onDelete}

@@ -1,17 +1,20 @@
 import React from "react";
-import { Box, Button, Heading, HStack, Input, Stack } from "@chakra-ui/react";
+import { Box, Button, HStack, Input, Stack } from "@chakra-ui/react";
 import Entry from "../../components/entry/Entry";
 import Alert from "../../components/alert/Alert";
-import { State } from "src/Application";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
+import AppHeader from "src/components/appHeader/AppHeader";
 
 type GetNamesProps = {
   names: string[];
   setNames: React.Dispatch<React.SetStateAction<string[]>>;
-  setCurrentState: React.Dispatch<React.SetStateAction<number>>;
+  handleRestart: () => void;
 }
 
-const GetNames: React.FC<GetNamesProps> = ({ names, setNames, setCurrentState }) => {
+const GetNames: React.FC<GetNamesProps> = ({ names, setNames, handleRestart }) => {
+  const navigate = useNavigate();
+
   const [nameInputValue, setNameInputValue] = React.useState('');
   const [alertMessage, setAlertMessage] = React.useState('');
 
@@ -61,7 +64,7 @@ const GetNames: React.FC<GetNamesProps> = ({ names, setNames, setCurrentState })
   return (
     <>
       <Box>
-        <Heading>Names</Heading>
+        <AppHeader title="Names" handleRestart={handleRestart} />
         <Stack dir="vertical">
           {names.map((name: string, idx: number) => (
             <Entry
@@ -82,7 +85,7 @@ const GetNames: React.FC<GetNamesProps> = ({ names, setNames, setCurrentState })
           </HStack>
         </form>
         <Button
-          onClick={() => setCurrentState(State.GET_BILLS)}
+          onClick={() => navigate('/get-bills')}
           isFullWidth
           colorScheme='cyan'
           mt={2}

@@ -1,8 +1,9 @@
 import { Box, Button, Flex, FormControl, HStack, Input, NumberInput, NumberInputField, Stack } from "@chakra-ui/react";
 import React from "react";
 import { useEffect } from "react";
-import { State } from "src/Application";
+import { useNavigate } from "react-router-dom";
 import Alert from "src/components/alert/Alert";
+import AppHeader from "src/components/appHeader/AppHeader";
 import { Bill } from "../getBills/GetBills";
 
 type IndividualAmount = {
@@ -16,10 +17,11 @@ type AllocateBillsProps = {
   bills: Bill[];
   individualAmounts: IndividualAmounts;
   setIndividualAmounts: React.Dispatch<React.SetStateAction<IndividualAmounts>>;
-  setCurrentState: React.Dispatch<React.SetStateAction<number>>;
+  handleRestart: () => void;
 }
 
-const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualAmounts, setIndividualAmounts, setCurrentState }) => {
+const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualAmounts, setIndividualAmounts, handleRestart }) => {
+  const navigate = useNavigate();
 
   const [billNumber, setBillNumber] = React.useState(0);
   const [selectedNames, setSelectedNames] = React.useState(new Array(names.length).fill(false));
@@ -78,7 +80,7 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualA
     setIndividualAmounts(updatedIndividualAmounts);
 
     if (isLastBill) {
-      setCurrentState(State.SUMMARY);
+      navigate('/summary');
       return;
     }
 
@@ -86,10 +88,19 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualA
     setBillNumber(billNumber + 1);
   }
 
+  if (!bills.length) {
+    return (
+      <Box>
+        <AppHeader title='Allocate' handleRestart={handleRestart} />
+        <Alert message="There are no bills! Please restart by clicking the button above!" />
+      </Box>
+    )
+  }
 
   return (
     <Flex flexDir='column' h='100%' justify='space-between'>
       <Box>
+        <AppHeader title='Allocate' handleRestart={handleRestart} />
         <FormControl>
           <HStack color='black'>
             <Input
