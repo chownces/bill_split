@@ -1,16 +1,26 @@
-import { Box, Button, Flex, FormControl, HStack, Input, NumberInput, NumberInputField, Stack } from "@chakra-ui/react";
-import React from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Alert from "src/components/alert/Alert";
-import AppHeader from "src/components/appHeader/AppHeader";
-import { Bill } from "../getBills/GetBills";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  HStack,
+  Input,
+  NumberInput,
+  NumberInputField,
+  Stack
+} from '@chakra-ui/react';
+import React from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Alert from 'src/components/alert/Alert';
+import AppHeader from 'src/components/appHeader/AppHeader';
+import { Bill } from '../getBills/GetBills';
 
 type IndividualAmount = {
   paid: number; // amount paid
   needsToPay: number; // amount that needs to be paid after splitting
-}
-export type IndividualAmounts = {[key: string]: IndividualAmount}
+};
+export type IndividualAmounts = { [key: string]: IndividualAmount };
 
 type AllocateBillsProps = {
   names: string[];
@@ -18,9 +28,15 @@ type AllocateBillsProps = {
   individualAmounts: IndividualAmounts;
   setIndividualAmounts: React.Dispatch<React.SetStateAction<IndividualAmounts>>;
   handleRestart: () => void;
-}
+};
 
-const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualAmounts, setIndividualAmounts, handleRestart }) => {
+const AllocateBills: React.FC<AllocateBillsProps> = ({
+  names,
+  bills,
+  individualAmounts,
+  setIndividualAmounts,
+  handleRestart
+}) => {
   const navigate = useNavigate();
 
   const [billNumber, setBillNumber] = React.useState(0);
@@ -36,7 +52,7 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualA
         updatedIndividualAmounts[bill.paidBy] = {
           paid: 0,
           needsToPay: 0
-        }
+        };
       }
       updatedIndividualAmounts[bill.paidBy].paid += parseFloat(bill.amount);
     });
@@ -62,19 +78,21 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualA
 
     const hasToPay = names.filter((_, idx) => selectedNames[idx]);
 
-    hasToPay.forEach((name) => {
+    hasToPay.forEach(name => {
       if (!updatedIndividualAmounts[name]) {
         updatedIndividualAmounts[name] = {
           paid: 0,
           needsToPay: 0
-        }
+        };
       }
 
       // Prevent mutation of React state
       updatedIndividualAmounts[name] = {
         ...updatedIndividualAmounts[name],
-        needsToPay: updatedIndividualAmounts[name].needsToPay + parseFloat(bills[billNumber].amount) / hasToPay.length
-      }
+        needsToPay:
+          updatedIndividualAmounts[name].needsToPay +
+          parseFloat(bills[billNumber].amount) / hasToPay.length
+      };
     });
 
     setIndividualAmounts(updatedIndividualAmounts);
@@ -84,52 +102,44 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualA
       return;
     }
 
-    setSelectedNames(new Array(names.length).fill(false))
+    setSelectedNames(new Array(names.length).fill(false));
     setBillNumber(billNumber + 1);
-  }
+  };
 
   if (!bills.length) {
     return (
       <Box>
-        <AppHeader title='Allocate' handleRestart={handleRestart} />
+        <AppHeader title="Allocate" handleRestart={handleRestart} />
         <Alert message="There are no bills! Please restart by clicking the button above!" />
       </Box>
-    )
+    );
   }
 
   return (
-    <Flex flexDir='column' h='100%' justify='space-between'>
+    <Flex flexDir="column" h="100%" justify="space-between">
       <Box>
-        <AppHeader title='Allocate' handleRestart={handleRestart} />
+        <AppHeader title="Allocate" handleRestart={handleRestart} />
         <FormControl>
-          <HStack color='black'>
-            <Input
-              value={bills[billNumber].description}
-              isReadOnly
-              bg='white'
-            />
-            <NumberInput
-              value={`Amt: $` + bills[billNumber].amount}
-              bg='white'
-              isReadOnly
-            >
+          <HStack color="black">
+            <Input value={bills[billNumber].description} isReadOnly bg="white" />
+            <NumberInput value={`Amt: $` + bills[billNumber].amount} bg="white" isReadOnly>
               <NumberInputField />
             </NumberInput>
           </HStack>
         </FormControl>
-        
+
         <Stack dir="column" mt={5}>
           {names.map((e: string, idx: number) => (
             <Button
-              variant='solid'
-              colorScheme='blue'
+              variant="solid"
+              colorScheme="blue"
               isActive={selectedNames[idx]}
               onClick={() => {
                 const temp = [...selectedNames];
                 temp[idx] = !temp[idx];
                 setSelectedNames(temp);
               }}
-              _hover={{backgroundColor: '#3182ce'}}
+              _hover={{ backgroundColor: '#3182ce' }}
               key={idx}
             >
               {e}
@@ -140,12 +150,17 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({ names, bills, individualA
 
       <Box>
         {alertMessage && <Alert message={alertMessage} />}
-        <Button onClick={handleNext} isFullWidth colorScheme={isLastBill ? 'cyan' : 'gray'}>
+        <Button
+          onClick={handleNext}
+          isFullWidth
+          colorScheme={isLastBill ? 'cyan' : 'gray'}
+          color="black"
+        >
           {isLastBill ? 'Calculate' : 'Next Bill'}
         </Button>
       </Box>
     </Flex>
-  )
-}
+  );
+};
 
 export default AllocateBills;

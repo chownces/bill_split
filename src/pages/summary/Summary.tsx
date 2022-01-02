@@ -1,16 +1,7 @@
-import { IndividualAmounts } from "../allocateBills/AllocateBills";
-import {
-  Box,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
-import React from "react";
-import AppHeader from "src/components/appHeader/AppHeader";
+import { IndividualAmounts } from '../allocateBills/AllocateBills';
+import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import React from 'react';
+import AppHeader from 'src/components/appHeader/AppHeader';
 
 type SummaryProps = {
   names: string[];
@@ -18,11 +9,7 @@ type SummaryProps = {
   handleRestart: () => void;
 };
 
-const Summary: React.FC<SummaryProps> = ({
-  names,
-  individualAmounts,
-  handleRestart
-}) => {
+const Summary: React.FC<SummaryProps> = ({ names, individualAmounts, handleRestart }) => {
   return (
     <Box>
       <AppHeader title="Summary" handleRestart={handleRestart} />
@@ -53,7 +40,9 @@ const Summary: React.FC<SummaryProps> = ({
           </Tbody>
         </Table>
       </Box>
-      <Text mt={3} align='right' fontStyle='italic' >* Everyone to have $0 balance after splitting</Text>
+      <Text mt={3} align="right" fontStyle="italic">
+        * Everyone to have $0 balance after splitting
+      </Text>
     </Box>
   );
 };

@@ -1,69 +1,70 @@
-import { Center, Flex } from "@chakra-ui/react";
-import React from "react";
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
-import "./Application.css";
-import { useLocalStorageState } from "./hooks";
-import AllocateBills, {
-  IndividualAmounts,
-} from "./pages/allocateBills/AllocateBills";
-import GetBills, { Bill } from "./pages/getBills/GetBills";
-import GetNames from "./pages/getNames/GetNames";
-import Summary from "./pages/summary/Summary";
+import { Center, Flex } from '@chakra-ui/react';
+import React from 'react';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import './Application.css';
+import { useLocalStorageState } from './hooks';
+import AllocateBills, { IndividualAmounts } from './pages/allocateBills/AllocateBills';
+import GetBills, { Bill } from './pages/getBills/GetBills';
+import GetNames from './pages/getNames/GetNames';
+import Summary from './pages/summary/Summary';
 
 export enum State {
   GET_NAMES,
   GET_BILLS,
   ALLOCATE_BILLS,
-  SUMMARY,
+  SUMMARY
 }
 
 const Application: React.FC = () => {
-
-  const [names, setNames] = useLocalStorageState<string[]>("names", []);
+  const [names, setNames] = useLocalStorageState<string[]>('names', []);
   const [bills, setBills] = React.useState<Bill[]>([]);
-  const [individualAmounts, setIndividualAmounts] =
-    React.useState<IndividualAmounts>({});
+  const [individualAmounts, setIndividualAmounts] = React.useState<IndividualAmounts>({});
 
   // Prevent mobile browser search bars from hiding and messing up the UI
   // Does not currently account for orientation changes
   React.useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--application-height",
-      window.innerHeight + "px"
-    );
+    document.documentElement.style.setProperty('--application-height', window.innerHeight + 'px');
   }, []);
 
   const handleRestart = () => {
     setBills([]);
     setIndividualAmounts({});
-  }
+  };
 
   const ENV = process.env.REACT_APP_NODE_ENV;
 
   return (
-    <Router basename={ENV === 'production' ? "/bill_split" : undefined}>
-      <Center bg="var(--main-bg-color)" className="Application" maxH={1000}>
+    <Router basename={ENV === 'production' ? '/bill_split' : undefined}>
+      <Center bg="var(--main-bg-color)" className="Application">
         <Flex
           w="100vw"
           maxW={600}
           h="100%"
+          maxH={1000}
           p={3}
           py={6}
           direction="column"
           justifyContent="space-between"
         >
           <Routes>
-            {["/", "get-names"].map((p, idx) => (
+            {['/', 'get-names'].map((p, idx) => (
               <Route
                 key={idx}
                 path={p}
-                element={<GetNames names={names} setNames={setNames} handleRestart={handleRestart} />}
+                element={
+                  <GetNames names={names} setNames={setNames} handleRestart={handleRestart} />
+                }
               />
             ))}
             <Route
               path="/get-bills"
               element={
-                <GetBills names={names} bills={bills} setBills={setBills} handleRestart={handleRestart} />
+                <GetBills
+                  names={names}
+                  bills={bills}
+                  setBills={setBills}
+                  handleRestart={handleRestart}
+                />
               }
             />
             <Route
@@ -81,7 +82,11 @@ const Application: React.FC = () => {
             <Route
               path="/summary"
               element={
-                <Summary names={names} individualAmounts={individualAmounts} handleRestart={handleRestart} />
+                <Summary
+                  names={names}
+                  individualAmounts={individualAmounts}
+                  handleRestart={handleRestart}
+                />
               }
             />
           </Routes>

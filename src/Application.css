@@ -6,12 +6,11 @@
   --dark-highlight: #22272e;
   --border: #545d68;
 
-  --danger: #e5534b
+  --danger: #e5534b;
 }
 .Application {
   height: var(--application-height, 100vh);
   color: rgb(173, 186, 199);
-
 }
 
 input {

@@ -1,4 +1,4 @@
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -12,13 +12,13 @@ import {
   NumberInputStepper,
   Select,
   Stack,
-  VStack,
-} from "@chakra-ui/react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import Alert from "src/components/alert/Alert";
-import AppHeader from "src/components/appHeader/AppHeader";
-import Entry from "src/components/entry/Entry";
+  VStack
+} from '@chakra-ui/react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Alert from 'src/components/alert/Alert';
+import AppHeader from 'src/components/appHeader/AppHeader';
+import Entry from 'src/components/entry/Entry';
 
 export type Bill = {
   description: string;
@@ -37,34 +37,34 @@ enum GstSvc {
   NONE = 1,
   GST_ONLY = 1.07,
   SVC_ONLY = 1.1,
-  GST_AND_SVC = 1.07 * 1.1,
+  GST_AND_SVC = 1.07 * 1.1
 }
 
 const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleRestart }) => {
   const navigate = useNavigate();
 
-  const [description, setDescription] = React.useState("");
-  const [amount, setAmount] = React.useState("0.00");
-  const [paidBy, setPaidBy] = React.useState("");
+  const [description, setDescription] = React.useState('');
+  const [amount, setAmount] = React.useState('0.00');
+  const [paidBy, setPaidBy] = React.useState('');
   const [gstAndSvc, setGstAndSvc] = React.useState<number>(GstSvc.NONE);
 
-  const [alertMessage, setAlertMessage] = React.useState("");
+  const [alertMessage, setAlertMessage] = React.useState('');
 
   const showAlert = (msg: string) => {
     setAlertMessage(msg);
-    setTimeout(() => setAlertMessage(""), 3000);
+    setTimeout(() => setAlertMessage(''), 3000);
   };
 
-  const addNewBillHandler: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const addNewBillHandler: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
 
     if (!description || !amount || !paidBy) {
-      showAlert("Please fill in all fields!");
+      showAlert('Please fill in all fields!');
       return;
     }
 
     if (names.includes(description)) {
-      showAlert("This bill name already exists!");
+      showAlert('This bill name already exists!');
       return;
     }
 
@@ -75,14 +75,14 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
       {
         description,
         amount: String(totalAmount),
-        paidBy,
-      },
+        paidBy
+      }
     ];
     setBills(updatedBills);
 
-    setDescription("");
-    setAmount("0.00");
-    setPaidBy("");
+    setDescription('');
+    setAmount('0.00');
+    setPaidBy('');
   };
 
   const onDeleteHandler = (idx: number) => () => {
@@ -93,11 +93,11 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
 
   const handleNext = () => {
     if (!bills.length) {
-      setAlertMessage("Please input at least 1 bill!");
-      setTimeout(() => setAlertMessage(""), 3000);
+      setAlertMessage('Please input at least 1 bill!');
+      setTimeout(() => setAlertMessage(''), 3000);
       return;
     }
-    navigate("/allocate-bills");
+    navigate('/allocate-bills');
   };
 
   const renderDescriptionInput = () => (
@@ -106,7 +106,7 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
       placeholder="Description..."
       bg="white"
       color="black"
-      onChange={(e) => setDescription(e.target.value)}
+      onChange={e => setDescription(e.target.value)}
     />
   );
 
@@ -119,8 +119,8 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
       min={0}
       step={0.01}
       bg="white"
-      onChange={(val) => setAmount(val)}
-      onFocus={(e) => e.target.select()}
+      onChange={val => setAmount(val)}
+      onFocus={e => e.target.select()}
     >
       <NumberInputField />
       <NumberInputStepper>
@@ -133,7 +133,7 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
   const renderGstServiceChargeInput = () => (
     <Select
       bg="white"
-      onChange={(e) => setGstAndSvc(parseFloat(e.target.value))}
+      onChange={e => setGstAndSvc(parseFloat(e.target.value))}
       value={gstAndSvc}
       overflow="hidden"
       textOverflow="ellipsis"
@@ -147,12 +147,7 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
   );
 
   const renderAmountAfterGst = () => (
-    <NumberInput
-      isReadOnly
-      color="green"
-      value={`$` + parseFloat(amount) * gstAndSvc}
-      bg="white"
-    >
+    <NumberInput isReadOnly color="green" value={`$` + parseFloat(amount) * gstAndSvc} bg="white">
       <NumberInputField />
     </NumberInput>
   );
@@ -161,7 +156,7 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
     <Select
       placeholder="Paid by..."
       bg="white"
-      onChange={(e) => setPaidBy(e.target.value)}
+      onChange={e => setPaidBy(e.target.value)}
       value={paidBy}
     >
       {names.map((name, idx) => (
@@ -186,7 +181,7 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
           {bills.map((bill: Bill, idx: number) => (
             <Entry
               key={idx}
-              content={[bill.description, "$" + bill.amount, bill.paidBy]}
+              content={[bill.description, '$' + bill.amount, bill.paidBy]}
               onDelete={onDeleteHandler(idx)}
             />
           ))}

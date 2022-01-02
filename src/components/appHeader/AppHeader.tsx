@@ -1,4 +1,4 @@
-import { RepeatIcon } from "@chakra-ui/icons";
+import { RepeatIcon } from '@chakra-ui/icons';
 import {
   Button,
   Heading,
@@ -11,10 +11,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
-} from "@chakra-ui/react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+  useDisclosure
+} from '@chakra-ui/react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type AppHeaderProps = {
   title: string;
