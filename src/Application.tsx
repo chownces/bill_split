@@ -17,14 +17,8 @@ export enum State {
 
 const Application: React.FC = () => {
   const [names, setNames] = useLocalStorageState<string[]>('names', []);
-  const [bills, setBills] = React.useState<Bill[]>([]);
+  const [bills, setBills] = useLocalStorageState<Bill[]>('bills', []);
   const [individualAmounts, setIndividualAmounts] = React.useState<IndividualAmounts>({});
-
-  // Prevent mobile browser search bars from hiding and messing up the UI
-  // Does not currently account for orientation changes
-  React.useEffect(() => {
-    document.documentElement.style.setProperty('--application-height', window.innerHeight + 'px');
-  }, []);
 
   const handleRestart = () => {
     setBills([]);

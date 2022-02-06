@@ -16,9 +16,9 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Alert from 'src/components/alert/Alert';
 import AppHeader from 'src/components/appHeader/AppHeader';
 import Entry from 'src/components/entry/Entry';
+import { useErrorToast } from 'src/hooks';
 
 export type Bill = {
   description: string;
@@ -42,29 +42,22 @@ enum GstSvc {
 
 const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleRestart }) => {
   const navigate = useNavigate();
+  const showErrorToast = useErrorToast();
 
   const [description, setDescription] = React.useState('');
   const [amount, setAmount] = React.useState('0.00');
   const [paidBy, setPaidBy] = React.useState('');
   const [gstAndSvc, setGstAndSvc] = React.useState<number>(GstSvc.NONE);
 
-  const [alertMessage, setAlertMessage] = React.useState('');
-
-  const showAlert = (msg: string) => {
-    setAlertMessage(msg);
-    setTimeout(() => setAlertMessage(''), 3000);
-  };
-
   const addNewBillHandler: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
 
-    if (!description || !amount || !paidBy) {
-      showAlert('Please fill in all fields!');
+    if (!description || parseFloat(amount) === 0 || !paidBy) {
+      showErrorToast('Please fill in all fields!');
       return;
     }
-
-    if (names.includes(description)) {
-      showAlert('This bill name already exists!');
+    if (bills.filter(b => b.description === description).length) {
+      showErrorToast('This bill name already exists!');
       return;
     }
 
@@ -93,8 +86,7 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
 
   const handleNext = () => {
     if (!bills.length) {
-      setAlertMessage('Please input at least 1 bill!');
-      setTimeout(() => setAlertMessage(''), 3000);
+      showErrorToast('Please input at least 1 bill!');
       return;
     }
     navigate('/allocate-bills');
@@ -175,21 +167,18 @@ const GetBills: React.FC<GetBillsProps> = ({ bills, setBills, names, handleResta
 
   return (
     <>
-      <Box>
-        <AppHeader title="Bills" handleRestart={handleRestart} />
-        <Stack dir="vertical">
-          {bills.map((bill: Bill, idx: number) => (
-            <Entry
-              key={idx}
-              content={[bill.description, '$' + bill.amount, bill.paidBy]}
-              onDelete={onDeleteHandler(idx)}
-            />
-          ))}
-        </Stack>
-      </Box>
+      <AppHeader title="Bills" handleRestart={handleRestart} />
+      <Stack dir="vertical" flexGrow={100} overflow="auto" mb={4}>
+        {bills.map((bill: Bill, idx: number) => (
+          <Entry
+            key={idx}
+            content={[bill.description, '$' + bill.amount, bill.paidBy]}
+            onDelete={onDeleteHandler(idx)}
+          />
+        ))}
+      </Stack>
 
       <Box>
-        {alertMessage && <Alert message={alertMessage} />}
         <form onSubmit={addNewBillHandler}>
           <VStack color="black">
             <FormControl>

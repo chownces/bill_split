@@ -1,5 +1,6 @@
-import { RepeatIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, RepeatIcon } from '@chakra-ui/icons';
 import {
+  Box,
   Button,
   Heading,
   HStack,
@@ -11,10 +12,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tooltip,
   useDisclosure
 } from '@chakra-ui/react';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type AppHeaderProps = {
   title: string;
@@ -23,21 +25,59 @@ type AppHeaderProps = {
 
 const AppHeader: React.FC<AppHeaderProps> = ({ title, handleRestart }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // TODO: Abstract routes and backwards navigation into a new class
+  const handleBackwardsNavigation = useMemo(
+    () => () => {
+      switch (location.pathname) {
+        case '/':
+          break;
+        case '/get-names':
+          break;
+        case '/get-bills':
+          navigate('/');
+          break;
+        case '/allocate-bills':
+          navigate('/get-bills');
+          break;
+        case '/summary':
+          navigate('/allocate-bills');
+          break;
+        default:
+          break;
+      }
+    },
+    [location.pathname, navigate]
+  );
 
   return (
     <>
       <HStack px={2} pb={4} justify="space-between">
         <Heading>{title}</Heading>
-        <IconButton
-          icon={<RepeatIcon />}
-          aria-label="restart"
-          color="white"
-          bg="var(--danger)"
-          colorScheme="red"
-          onClick={onOpen}
-        />
+        <Box>
+          <Tooltip label="Back" placement="top">
+            <IconButton
+              icon={<ArrowBackIcon />}
+              aria-label="back"
+              colorScheme="whiteAlpha"
+              onClick={handleBackwardsNavigation}
+              mr={2}
+            />
+          </Tooltip>
+          <Tooltip label="Restart" placement="top">
+            <IconButton
+              icon={<RepeatIcon />}
+              aria-label="restart"
+              color="white"
+              bg="var(--danger)"
+              colorScheme="red"
+              onClick={onOpen}
+            />
+          </Tooltip>
+        </Box>
       </HStack>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

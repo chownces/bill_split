@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Flex,
   FormControl,
   HStack,
   Input,
@@ -14,6 +13,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Alert from 'src/components/alert/Alert';
 import AppHeader from 'src/components/appHeader/AppHeader';
+import { useErrorToast } from 'src/hooks';
 import { Bill } from '../getBills/GetBills';
 
 type IndividualAmount = {
@@ -38,10 +38,10 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({
   handleRestart
 }) => {
   const navigate = useNavigate();
+  const showErrorToast = useErrorToast();
 
   const [billNumber, setBillNumber] = React.useState(0);
   const [selectedNames, setSelectedNames] = React.useState(new Array(names.length).fill(false));
-  const [alertMessage, setAlertMessage] = React.useState('');
 
   const isLastBill = billNumber === bills.length - 1;
 
@@ -67,8 +67,7 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({
 
   const handleNext = () => {
     if (selectedNames.reduce((acc, x) => !x && acc, true)) {
-      setAlertMessage('Please select at least 1 person!');
-      setTimeout(() => setAlertMessage(''), 3000);
+      showErrorToast('Please select at least 1 person!');
       return;
     }
 
@@ -116,20 +115,20 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({
   }
 
   return (
-    <Flex flexDir="column" h="100%" justify="space-between">
-      <Box>
-        <AppHeader title="Allocate" handleRestart={handleRestart} />
-        <FormControl>
-          <HStack color="black">
-            <Input value={bills[billNumber].description} isReadOnly bg="white" />
-            <NumberInput value={`Amt: $` + bills[billNumber].amount} bg="white" isReadOnly>
-              <NumberInputField />
-            </NumberInput>
-          </HStack>
-        </FormControl>
+    <>
+      <AppHeader title="Allocate" handleRestart={handleRestart} />
+      <FormControl>
+        <HStack color="black">
+          <Input value={bills[billNumber].description} isReadOnly bg="white" />
+          <NumberInput value={`Amt: $` + bills[billNumber].amount} bg="white" isReadOnly>
+            <NumberInputField />
+          </NumberInput>
+        </HStack>
+      </FormControl>
 
-        <Stack dir="column" mt={5}>
-          {names.map((e: string, idx: number) => (
+      <Stack dir="column" mt={4} mb={4} overflow="auto" flexGrow={100}>
+        {names.map((e: string, idx: number) => (
+          <Box>
             <Button
               variant="solid"
               colorScheme="blue"
@@ -141,15 +140,15 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({
               }}
               _hover={{ backgroundColor: '#3182ce' }}
               key={idx}
+              isFullWidth
             >
               {e}
             </Button>
-          ))}
-        </Stack>
-      </Box>
+          </Box>
+        ))}
+      </Stack>
 
       <Box>
-        {alertMessage && <Alert message={alertMessage} />}
         <Button
           onClick={handleNext}
           isFullWidth
@@ -159,7 +158,7 @@ const AllocateBills: React.FC<AllocateBillsProps> = ({
           {isLastBill ? 'Calculate' : 'Next Bill'}
         </Button>
       </Box>
-    </Flex>
+    </>
   );
 };
 
