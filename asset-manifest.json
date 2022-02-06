@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/just_split_lah/static/css/main.bbf746e1.css",
+    "main.js": "/just_split_lah/static/js/main.107f2e13.js",
+    "index.html": "/just_split_lah/index.html",
+    "main.bbf746e1.css.map": "/just_split_lah/static/css/main.bbf746e1.css.map",
+    "main.107f2e13.js.map": "/just_split_lah/static/js/main.107f2e13.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bbf746e1.css",
+    "static/js/main.107f2e13.js"
+  ]
+}
